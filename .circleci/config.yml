@@ -27,3 +27,9 @@ jobs:
           command: |
             pushd services
             mvn test
+      - store_test_results:
+          path: services/common/target/surefire-reports/*.xml
+      - store_test_results:
+          path: services/ec2/target/surefire-reports/*.xml
+      - store_test_results:
+          path: services/rds/target/surefire-reports/*.xml
