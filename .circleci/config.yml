@@ -27,6 +27,12 @@ jobs:
           command: |
             pushd services
             mvn clean package
+      - run:
+          name: Check-Target
+          command: |
+            ls -ltr services/common/target
+            ls -ltr services/rds/target
+            ls -ltr services/ec2/target
       - store_test_results:
           path: services/common/target/surefire-reports/*.xml
       - store_test_results:
