@@ -23,10 +23,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build-And-Run-Tests
+          name: Build-Backend-Services-And-Run-Tests
           command: |
             pushd services
             mvn clean package
+      - run:
+          name: Build-UI-And-Run-Tests
+          command: |
+            pushd ui
+            npm run test
+            npm run build
       - run:
           name: Save-Tests
           command: |
