@@ -31,16 +31,34 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - restore_cache:
+          keys:
+              - v1-dependencies-{{ checksum "package.json" }}
+              - v1-dependencies-
       - run:
           name: Install Dependencies
           command: |
             pushd ui
             npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+              - ui/node_modules
+      - run:
+          name: Run Tests
+          command |
+            pushd ui
+            npm run test
       - run:
           name: Save-Tests
           command: |
             mkdir -p ~/junit
             find . -type f -regex ".*/test/junit/.*xml" -exec cp {} ~/junit/ \;
+      - run:
+          name: Build Application
+          command: |
+            pushd ui
+            npm run build
       - store_test_results:
           path: ~/junit
 workflows:
