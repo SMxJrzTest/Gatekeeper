@@ -71,15 +71,16 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get install openssl
             apk add --no-cache \
               openssl
-            ls -ltr /usr/bin
             apk add --no-cache \
               py-pip=9.0.0-r1
             pip install \
               docker-compose==1.12.0 \
               awscli==1.11.76
+            ls -ltr /usr/bin
+            which docker-compose
+
       - run:
           name: Build Containers
           command: |
