@@ -27,7 +27,7 @@ jobs:
           path: ~/junit
   build_ui:
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:10-stretch-browsers
     working_directory: ~/repo
     steps:
       - checkout
