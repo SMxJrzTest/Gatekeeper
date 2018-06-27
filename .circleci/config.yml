@@ -23,19 +23,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Backend-Tests
+          name: Build-And-Run-Tests
           command: |
             pushd services
             mvn clean package
       - run:
-          name: Check-Target
+          name: Save-Tests
           command: |
-            ls -ltr services/common/target
-            ls -ltr services/rds/target
-            ls -ltr services/ec2/target
+            mkdir -p ~/junit
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
+            ls -ltr ~/junit
       - store_test_results:
-          path: services/common/target/surefire-reports/*.xml
-      - store_test_results:
-          path: services/ec2/target/surefire-reports/*.xml
-      - store_test_results:
-          path: services/rds/target/surefire-reports/*.xml
+          path: ./junit
