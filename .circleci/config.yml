@@ -81,7 +81,7 @@ jobs:
             ls -ltr /usr/bin
             which docker-compose
             openssl
-            docker-compose
+            which openssl
 
       - run:
           name: Build Containers
