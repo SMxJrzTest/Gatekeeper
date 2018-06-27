@@ -39,7 +39,7 @@ jobs:
           name: Install Dependencies
           command: |
             pushd ui
-            npm install
+            npm install --verbose
       - save_cache:
           key: v1-dependencies-{{ checksum "ui/package.json" }}
           paths:
