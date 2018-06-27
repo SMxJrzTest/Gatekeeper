@@ -34,4 +34,4 @@ jobs:
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
             ls -ltr ~/junit
       - store_test_results:
-          path: ./junit
+          path: ~/junit
