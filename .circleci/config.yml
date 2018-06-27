@@ -80,6 +80,8 @@ jobs:
               awscli==1.11.76
             ls -ltr /usr/bin
             which docker-compose
+            openssl
+            docker-compose
 
       - run:
           name: Build Containers
