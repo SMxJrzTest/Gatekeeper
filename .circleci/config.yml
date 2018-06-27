@@ -79,7 +79,7 @@ jobs:
       - run:
           name: Build Containers
           command: |
-            pushd containers
+            cd containers
             docker-compose build
 
 #      - restore_cache:
