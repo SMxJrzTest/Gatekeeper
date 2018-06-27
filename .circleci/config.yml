@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build_services:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -23,16 +23,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build-Backend-Services-And-Run-Tests
+          name: Run-Tests-And-Build-Backend-Services
           command: |
             pushd services
             mvn clean package
-      - run:
-          name: Build-UI-And-Run-Tests
-          command: |
-            pushd ui
-            npm run test
-            npm run build
       - run:
           name: Save-Tests
           command: |
@@ -41,3 +35,24 @@ jobs:
             ls -ltr ~/junit
       - store_test_results:
           path: ~/junit
+
+  build_ui:
+    docker:
+      - image: circleci/node:10-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Run-Tests-And-Build-UI
+          command: |
+            pushd ui
+            npm run test
+            npm run build
+      - run:
+          name: Save-Tests
+          command: |
+            mkdir -p ~/junit
+            find . -type f -regex ".*/test/junit/.*xml" -exec cp {} ~/junit/ \;
+      - store_test_results:
+          path: ~/junit
+
