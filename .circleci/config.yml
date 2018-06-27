@@ -46,7 +46,7 @@ jobs:
               - ui/node_modules
       - run:
           name: Run Tests
-          command |
+          command: |
             pushd ui
             npm run test
       - run:
