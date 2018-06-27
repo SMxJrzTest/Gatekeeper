@@ -71,8 +71,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            ls -ltr /usr/bin
             apk add --no-cache \
               openssl
+            ls -ltr /usr/bin/openssl
             apk add --no-cache \
               py-pip=9.0.0-r1
             pip install \
