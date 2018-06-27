@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build_services:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -57,7 +57,7 @@ jobs:
           path: ~/junit
 workflows:
   version: 2
-    build_all:
+    build_services_and_ui:
       jobs:
-        - build_services
+        - build
         - build_ui
