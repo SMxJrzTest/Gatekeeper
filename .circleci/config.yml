@@ -13,12 +13,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run-Tests-And-Build-Backend-Services
+          name: Run Tests and Build Backend Services
           command: |
             pushd services
             mvn clean package
       - run:
-          name: Save-Tests
+          name: Save Tests
           command: |
             mkdir -p ~/junit
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
@@ -32,11 +32,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run-Tests-And-Build-UI
+          name: Install Dependencies
           command: |
             pushd ui
-            npm run test
-            npm run build
+            npm install
       - run:
           name: Save-Tests
           command: |
