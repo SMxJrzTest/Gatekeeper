@@ -194,6 +194,7 @@ jobs:
           name: Build Gatekeeper UI Container
           command: |
             cd ui
+            pwd
             ls -ltr /caches
             ls -ltr
             ls -ltr dist
@@ -219,6 +220,7 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
+            mv /home/circleci/repo/services/rds/target ~/repo/sevices/rds
       - run:
           name: Build Gatekeeper RDS Service Container
           command: |
@@ -247,6 +249,7 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
+            mv /home/circleci/repo/services/ec2/target ~/repo/sevices/ec2
       - run:
           name: Build Gatekeeper EC2 Service Container
           command: |
