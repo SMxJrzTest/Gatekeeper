@@ -92,9 +92,17 @@ jobs:
           keys:
             - gk_cntnr_base_v1-{{ .Branch }}
           paths:
-            - /caches/nginx.tar
-            - /caches/java.tar
             - /caches/base.tar
+      - restore_cache:
+          keys:
+            - gk_cntnr_java_v1-{{ .Branch }}
+          paths:
+            - /caches/java.tar
+      - restore_cache:
+          keys:
+            - gk_cntnr_nginx_v1-{{ .Branch }}
+          paths:
+            - /caches/nginx.tar
       - run:
           name: Load Docker image layer cache
           command: |
@@ -129,11 +137,18 @@ jobs:
             docker save -o /caches/nginx.tar gatekeeper/nginx
             docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
-          key: gk_cntnr_base_v1-{{ .Branch }}-{{ checksum "caches/base.tar" }}{{ checksum "caches/java.tar" }}{{ checksum "caches/nginx.tar" }}
+          key: gk_cntnr_base_v1-{{ .Branch }}-{{ checksum "/caches/base.tar" }}
+          paths:
+            - /caches/base.tar
+      - save_cache:
+          key: gk_cntnr_java_v1-{{ .Branch }}-{{ checksum "/caches/java.tar" }}
+          paths:
+            - /caches/java.tar
+      - save_cache:
+          key: gk_cntnr_nginx_v1-{{ .Branch }}-{{ checksum "/caches/nginx.tar" }}
           paths:
             - /caches/nginx.tar
-            - /caches/java.tar
-            - /caches/base.tar
+
   build_and_push_ui:
     working_directory: /repo
     docker:
@@ -158,6 +173,7 @@ jobs:
           name: Build Gatekeeper UI Container
           command: |
             cd ui
+            ls -ltr /caches
             ls -ltr
             ls -ltr dist
             docker build -t gatekeeper/ui ./
