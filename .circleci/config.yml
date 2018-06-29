@@ -171,7 +171,7 @@ jobs:
             - /caches/nginx.tar
 
   build_and_push_ui:
-    working_directory: /repo
+    working_directory: ~/repo
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -200,7 +200,7 @@ jobs:
             docker build -t gatekeeper/ui ./
             docker images
   build_and_push_rds:
-    working_directory: /repo
+    working_directory: ~/repo
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -215,7 +215,7 @@ jobs:
           keys:
             - gk-rds-{{ .Branch }}
       - run:
-          name: Load Docker image + stage UI code
+          name: Load Docker image
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
@@ -228,7 +228,7 @@ jobs:
             docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/rds ./
             docker images
   build_and_push_ec2:
-    working_directory: /repo
+    working_directory: ~/repo
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -243,7 +243,7 @@ jobs:
           keys:
             - gk-ec2-{{ .Branch }}
       - run:
-          name: Load Docker image + stage UI code
+          name: Load Docker image
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
@@ -251,7 +251,7 @@ jobs:
           name: Build Gatekeeper EC2 Service Container
           command: |
             cd services/ec2
-            docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/ec2 ./
+            docker build --build-arg jar_file=gatekeeper-ec2-service-1.0.0.jar -t gatekeeper/ec2 ./
             docker images
 workflows:
   version: 2
