@@ -28,11 +28,11 @@ jobs:
       - save_cache:
           key: gk-ec2-{{ .Branch }}-{{ epoch }}
           paths:
-              - services/ec2/*.jar
+              - ~/services/ec2/*.jar
       - save_cache:
           key: gk-rds-{{ .Branch }}-{{ epoch }}
           paths:
-              - services/rds/*.jar
+              - ~/services/rds/*.jar
   build_ui:
     docker:
       - image: circleci/node:10-stretch-browsers
@@ -52,7 +52,7 @@ jobs:
       - save_cache:
           key: v1-dependencies-{{ checksum "ui/package.json" }}
           paths:
-              - ui/node_modules
+              - ~/ui/node_modules
       - run:
           name: Run Tests
           command: |
@@ -71,7 +71,7 @@ jobs:
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist
+              - ~/ui/dist
       - store_test_results:
           path: ~/junit
   build_base_docker:
