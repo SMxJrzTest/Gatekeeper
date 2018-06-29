@@ -95,20 +95,20 @@ jobs:
           command: |
             cd containers
             cd base
-            docker build -t gatekeeper/base ./
+            docker build --cache-from=gatekeeper/base -t gatekeeper/base ./
       - run:
           name: Build Java Container
           command: |
             docker images
             cd containers
             cd java
-            docker build -t gatekeeper/java ./
+            docker build -t --cache-from=gatekeeper/java gatekeeper/java ./
       - run:
           name: Build Nginx Container
           command: |
             cd containers
             cd nginx
-            docker build -t gatekeeper/nginx ./
+            docker build -t --cache-from=gatekeeper/nginx gatekeeper/nginx ./
       - run:
           name: Save Docker image layer cache
           command: |
