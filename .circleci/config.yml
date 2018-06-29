@@ -46,6 +46,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
+            ls -ltr ui
             pushd ui
             npm install --verbose
       - save_cache:
@@ -73,7 +74,7 @@ jobs:
               - ui/dist
       - store_test_results:
           path: ~/junit
-  build_docker:
+  build_base_docker:
     working_directory: /repo
     docker:
       - image: docker:17.05.0-ce-git
@@ -81,54 +82,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-              py-pip=9.0.0-r1
-            pip install \
-              docker-compose==1.12.0 \
-              awscli==1.11.76
-      - restore_cache:
-          keys:
-            - gk_cntnr_base_v1-{{ .Branch }}
-          paths:
-            - /caches/base.tar
-      - restore_cache:
-          keys:
-            - gk_cntnr_java_v1-{{ .Branch }}
-          paths:
-            - /caches/java.tar
-      - restore_cache:
-          keys:
-            - gk_cntnr_nginx_v1-{{ .Branch }}
-          paths:
-            - /caches/nginx.tar
-      - run:
-          name: Load Docker image layer cache
-          command: |
-            set +o pipefail
-            docker load -i /caches/base.tar | true
-            docker load -i /caches/java.tar | true
-            docker load -i /caches/nginx.tar | true
-      - run:
           name: Build Base Container
           command: |
             cd containers
             cd base
             docker build --cache-from gatekeeper/base -t gatekeeper/base ./
-      - run:
-          name: Build Java Container
-          command: |
-            docker images
-            cd containers
-            cd java
-            docker build --cache-from gatekeeper/java -t gatekeeper/java ./
-      - run:
-          name: Build Nginx Container
-          command: |
-            cd containers
-            cd nginx
-            docker build --cache-from gatekeeper/nginx -t gatekeeper/nginx ./
       - run:
           name: Save Docker image layer cache
           command: |
@@ -140,10 +98,61 @@ jobs:
           key: gk_cntnr_base_v1-{{ .Branch }}-{{ checksum "/caches/base.tar" }}
           paths:
             - /caches/base.tar
+  build_java_docker:
+    working_directory: /repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - gk_cntnr_base_v1-{{ .Branch }}
+          paths:
+            - /caches/base.tar
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/base.tar | true
+      - run:
+          name: Build Java Container
+          command: |
+            cd containers
+            cd java
+            docker build gatekeeper/java -t gatekeeper/java ./
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
           key: gk_cntnr_java_v1-{{ .Branch }}-{{ checksum "/caches/java.tar" }}
           paths:
             - /caches/java.tar
+  build_nginx_docker:
+    working_directory: /repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - gk_cntnr_base_v1-{{ .Branch }}
+          paths:
+            - /caches/base.tar
+      - run:
+          name: Build Nginx Container
+          command: |
+            cd containers
+            cd nginx
+            docker build -t gatekeeper/nginx ./
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/nginx.tar gatekeeper/nginx
       - save_cache:
           key: gk_cntnr_nginx_v1-{{ .Branch }}-{{ checksum "/caches/nginx.tar" }}
           paths:
@@ -236,17 +245,26 @@ workflows:
     jobs:
       - build
       - build_ui
-      - build_docker
+      - build_base_docker
+      - build_java_docker:
+          requires:
+            - build_base_docker
+      - build_nginx_docker:
+          requires:
+            - build_base_docker
       - build_and_push_ui:
           requires:
             - build_ui
-            - build_docker
+            - build_base_docker
+            - build_nginx_docker
       - build_and_push_rds:
           requires:
             - build
-            - build_docker
+            - build_base_docker
+            - build_java_docker
       - build_and_push_ec2:
           requires:
             - build
-            - build_docker
+            - build_base_docker
+            - build_java_docker
 
