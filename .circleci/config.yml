@@ -38,11 +38,11 @@ jobs:
       - save_cache:
           key: gk-ec2-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/ec2/target
+              - ~/services/ec2/target/gatekeeper-ec2-service-1.0.0.jar
       - save_cache:
           key: gk-rds-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/rds/target
+              - ~/services/rds/target/gatekeeper-rds-service-1.0.0.jar
   build_ui:
     docker:
       - image: circleci/node:10-stretch-browsers
@@ -224,7 +224,7 @@ jobs:
           name: Build Gatekeeper RDS Service Container
           command: |
             cd services/rds
-            docker build -t gatekeeper/rds ./
+            docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/rds ./
             docker images
   build_and_push_ec2:
     working_directory: /repo
@@ -250,7 +250,7 @@ jobs:
           name: Build Gatekeeper EC2 Service Container
           command: |
             cd services/ec2
-            docker build -t gatekeeper/ec2 ./
+            docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/ec2 ./
             docker images
 workflows:
   version: 2
