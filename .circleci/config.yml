@@ -82,35 +82,29 @@ jobs:
           paths:
             - /caches/nginx.tar
             - /caches/java.tar
+            - /caches/base.tar
       - run:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
+            docker load -i /caches/base.tar | true
             docker load -i /caches/java.tar | true
             docker load -i /caches/nginx.tar | true
       - run:
-          name: Build Base Container
+          name: Build Containers
           command: |
             cd containers
             cd base
             docker build ./
-      - run:
-          name: Build Java Container
-          command: |
-            docker images
-            cd containers
-            cd java
+            cd ../java
             docker build ./
-      - run:
-          name: Build Nginx Container
-          command: |
-            cd containers
-            cd nginx
+            cd ../nginx
             docker build ./
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
+            docker save -o /caches/base.tar gatekeeper/base
             docker save -o /caches/nginx.tar gatekeeper/nginx
             docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
@@ -118,6 +112,7 @@ jobs:
           paths:
             - /caches/nginx.tar
             - /caches/java.tar
+            - /caches/base.tar
 #      - run:
 #          name: Run tests
 #          command: |
