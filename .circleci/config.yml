@@ -92,8 +92,6 @@ jobs:
           command: |
             mkdir -p /caches
             docker save -o /caches/base.tar gatekeeper/base
-            docker save -o /caches/nginx.tar gatekeeper/nginx
-            docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
           key: gk_cntnr_base_v1-{{ .Branch }}-{{ checksum "/caches/base.tar" }}
           paths:
