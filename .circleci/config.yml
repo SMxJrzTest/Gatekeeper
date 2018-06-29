@@ -102,13 +102,13 @@ jobs:
             docker images
             cd containers
             cd java
-            docker build -t --cache-from gatekeeper/java gatekeeper/java ./
+            docker build --cache-from gatekeeper/java -t gatekeeper/java ./
       - run:
           name: Build Nginx Container
           command: |
             cd containers
             cd nginx
-            docker build -t --cache-from gatekeeper/nginx gatekeeper/nginx ./
+            docker build --cache-from gatekeeper/nginx -t gatekeeper/nginx ./
       - run:
           name: Save Docker image layer cache
           command: |
