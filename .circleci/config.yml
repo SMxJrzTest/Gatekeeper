@@ -91,15 +91,24 @@ jobs:
             docker load -i /caches/java.tar | true
             docker load -i /caches/nginx.tar | true
       - run:
-          name: Build Containers
+          name: Build Base Container
           command: |
             cd containers
             cd base
-            docker build ./
-            cd ../java
-            docker build ./
-            cd ../nginx
-            docker build ./
+            docker build -t gatekeeper/base ./
+      - run:
+          name: Build Java Container
+          command: |
+            docker images
+            cd containers
+            cd java
+            docker build -t gatekeeper/java ./
+      - run:
+          name: Build Nginx Container
+          command: |
+            cd containers
+            cd nginx
+            docker build -t gatekeeper/nginx ./
       - run:
           name: Save Docker image layer cache
           command: |
