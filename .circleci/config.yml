@@ -220,7 +220,7 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
-            mv /home/circleci/repo/services/rds/target ~/repo/sevices/rds
+            mv /home/circleci/repo/services/rds/target ~/repo/services/rds
       - run:
           name: Build Gatekeeper RDS Service Container
           command: |
@@ -249,7 +249,7 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/java.tar | true
-            mv /home/circleci/repo/services/ec2/target ~/repo/sevices/ec2
+            mv /home/circleci/repo/services/ec2/target ~/repo/services/ec2
       - run:
           name: Build Gatekeeper EC2 Service Container
           command: |
