@@ -97,6 +97,7 @@ jobs:
       - run:
           name: Build Java Container
           command: |
+            docker images
             cd containers
             cd java
             docker build ./
