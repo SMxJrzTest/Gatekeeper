@@ -70,7 +70,7 @@ jobs:
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist/*
+              - ui/dist
       - store_test_results:
           path: ~/junit
   build_docker:
@@ -149,8 +149,6 @@ jobs:
       - restore_cache:
           keys:
             - gk-ui-{{ .Branch }}
-          paths:
-            - /ui/dist/*
       - run:
           name: Load Docker image + stage UI code
           command: |
@@ -179,8 +177,6 @@ jobs:
       - restore_cache:
           keys:
             - gk-rds-{{ .Branch }}
-          paths:
-            - /services/rds/*.jar
       - run:
           name: Load Docker image + stage UI code
           command: |
@@ -207,8 +203,6 @@ jobs:
       - restore_cache:
           keys:
             - gk-ec2-{{ .Branch }}
-          paths:
-            - /services/ec2/*.jar
       - run:
           name: Load Docker image + stage UI code
           command: |
