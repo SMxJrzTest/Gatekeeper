@@ -70,7 +70,7 @@ jobs:
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist
+              - ui/dist/*
       - store_test_results:
           path: ~/junit
   build_docker:
@@ -150,7 +150,7 @@ jobs:
           keys:
             - gk-ui-{{ .Branch }}
           paths:
-            - /ui/dist
+            - /ui/dist/*
       - run:
           name: Load Docker image + stage UI code
           command: |
@@ -185,7 +185,7 @@ jobs:
             set +o pipefail
             docker load -i /caches/java.tar | true
       - run:
-          name: Build Gatekeeper UI Container
+          name: Build Gatekeeper RDS Service Container
           command: |
             cd services/rds
             docker build -t gatekeeper/rds ./
@@ -213,7 +213,7 @@ jobs:
             set +o pipefail
             docker load -i /caches/java.tar | true
       - run:
-          name: Build Gatekeeper UI Container
+          name: Build Gatekeeper EC2 Service Container
           command: |
             cd services/ec2
             docker build -t gatekeeper/ec2 ./
