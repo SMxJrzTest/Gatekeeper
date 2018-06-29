@@ -170,7 +170,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - gk_cntnr_base_v1-{{ .Branch }}
+            - gk_cntnr_nginx_v1-{{ .Branch }}
           paths:
             - /caches/nginx.tar
       - restore_cache:
@@ -199,7 +199,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - gk_cntnr_base_v1-{{ .Branch }}
+            - gk_cntnr_java_v1-{{ .Branch }}
           paths:
             - /caches/java.tar
       - restore_cache:
@@ -225,7 +225,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - gk_cntnr_base_v1-{{ .Branch }}
+            - gk_cntnr_java_v1-{{ .Branch }}
           paths:
             - /caches/java.tar
       - restore_cache:
