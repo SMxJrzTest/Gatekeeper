@@ -86,7 +86,7 @@ jobs:
           command: |
             cd containers
             cd base
-            docker build --cache-from gatekeeper/base -t gatekeeper/base ./
+            docker build -t gatekeeper/base ./
       - run:
           name: Save Docker image layer cache
           command: |
@@ -118,7 +118,7 @@ jobs:
           command: |
             cd containers
             cd java
-            docker build gatekeeper/java -t gatekeeper/java ./
+            docker build -t gatekeeper/java ./
       - run:
           name: Save Docker image layer cache
           command: |
