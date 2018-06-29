@@ -32,17 +32,16 @@ jobs:
           command: |
             mkdir -p ~/junit
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
-            ls -ltr ~/junit
       - store_test_results:
           path: ~/junit
       - save_cache:
           key: gk-ec2-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/ec2/target/gatekeeper-ec2-service-1.0.0.jar
+              - services/ec2/target/gatekeeper-ec2-service-1.0.0.jar
       - save_cache:
           key: gk-rds-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/rds/target/gatekeeper-rds-service-1.0.0.jar
+              - services/rds/target/gatekeeper-rds-service-1.0.0.jar
   build_ui:
     docker:
       - image: circleci/node:10-stretch-browsers
@@ -77,11 +76,11 @@ jobs:
           command: |
             pushd ui
             npm run build
-            ls -ltr
+            cd ..
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/ui/dist
+              - ui/dist
       - store_test_results:
           path: ~/junit
   build_base_docker:
