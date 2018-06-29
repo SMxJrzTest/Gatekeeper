@@ -80,7 +80,7 @@ jobs:
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist
+              - ui/dist/*
       - store_test_results:
           path: ~/junit
   build_base_docker:
@@ -223,6 +223,8 @@ jobs:
           name: Build Gatekeeper RDS Service Container
           command: |
             cd services/rds
+            pwd
+            ls -ltr
             docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/rds ./
             docker images
   build_and_push_ec2:
