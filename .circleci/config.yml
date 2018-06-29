@@ -129,7 +129,7 @@ jobs:
             docker save -o /caches/nginx.tar gatekeeper/nginx
             docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
-          key: gk_cntnr_base_v1-{{ .Branch }}-{{ epoch }}
+          key: gk_cntnr_base_v1-{{ .Branch }}-{{ checksum "caches/base.tar.json" }}{{ checksum "caches/java.tar.json" }}{{ checksum "caches/nginx.tar.json" }}
           paths:
             - /caches/nginx.tar
             - /caches/java.tar
@@ -160,6 +160,8 @@ jobs:
           name: Build Gatekeeper UI Container
           command: |
             cd ui
+            ls -ltr
+            ls -ltr dist
             docker build -t gatekeeper/ui ./
             docker images
   build_and_push_rds:
