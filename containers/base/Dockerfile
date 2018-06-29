@@ -18,6 +18,7 @@ FROM amazonlinux:latest
 MAINTAINER Gatekeeper Contributors
 
 RUN ls /usr/bin
+RUN yum install openssl
 RUN openssl
 ADD /scripts/selfsign.sh /tmp/selfsign.sh
 RUN chmod a+rx /tmp/selfsign.sh
