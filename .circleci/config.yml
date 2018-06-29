@@ -12,11 +12,21 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     steps:
       - checkout
+            - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - maven-repo-{{ .Branch }}-{{ checksum "pom.xml" }}
+            - maven-repo-{{ .Branch }}-
+            - maven-repo
       - run:
           name: Run Tests and Build Backend Services
           command: |
             pushd services
             mvn clean package
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-repo-{{ .Branch }}-{{ checksum "pom.xml" }}
       - run:
           name: Save Tests
           command: |
@@ -28,11 +38,11 @@ jobs:
       - save_cache:
           key: gk-ec2-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/ec2/*.jar
+              - ~/services/ec2/target
       - save_cache:
           key: gk-rds-{{ .Branch }}-{{ epoch }}
           paths:
-              - ~/services/rds/*.jar
+              - ~/services/rds/target
   build_ui:
     docker:
       - image: circleci/node:10-stretch-browsers
