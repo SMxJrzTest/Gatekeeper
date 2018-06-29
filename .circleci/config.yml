@@ -25,6 +25,14 @@ jobs:
             ls -ltr ~/junit
       - store_test_results:
           path: ~/junit
+      - save_cache:
+          key: gk-ec2-{{ .Branch }}-{{ epoch }}
+          paths:
+              - services/ec2/*.jar
+      - save_cache:
+          key: gk-rds-{{ .Branch }}-{{ epoch }}
+          paths:
+              - services/rds/*.jar
   build_ui:
     docker:
       - image: circleci/node:10-stretch-browsers
@@ -59,6 +67,10 @@ jobs:
           command: |
             pushd ui
             npm run build
+      - save_cache:
+          key: gk-ui-{{ .Branch }}-{{ epoch }}
+          paths:
+              - ui/dist
       - store_test_results:
           path: ~/junit
   build_docker:
@@ -78,7 +90,7 @@ jobs:
               awscli==1.11.76
       - restore_cache:
           keys:
-            - v1-{{ .Branch }}
+            - gk_cntnr_base_v1-{{ .Branch }}
           paths:
             - /caches/nginx.tar
             - /caches/java.tar
@@ -117,24 +129,95 @@ jobs:
             docker save -o /caches/nginx.tar gatekeeper/nginx
             docker save -o /caches/java.tar gatekeeper/java
       - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
+          key: gk_cntnr_base_v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/nginx.tar
             - /caches/java.tar
             - /caches/base.tar
-#      - run:
-#          name: Run tests
-#          command: |
-#            docker-compose -f ./docker-compose.test.yml up
-#      - deploy:
-#          name: Push application Docker image
-#          command: |
-#            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-#              login="$(aws ecr get-login)"
-#              ${login}
-#              docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-#              docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-#            fi
+  build_and_push_ui:
+    working_directory: /repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - gk_cntnr_base_v1-{{ .Branch }}
+          paths:
+            - /caches/nginx.tar
+      - restore_cache:
+          keys:
+            - gk-ui-{{ .Branch }}
+          paths:
+            - /ui/dist
+      - run:
+          name: Load Docker image + stage UI code
+          command: |
+            set +o pipefail
+            docker load -i /caches/nginx.tar | true
+      - run:
+          name: Build Gatekeeper UI Container
+          command: |
+            cd ui
+            docker build -t gatekeeper/ui ./
+            docker images
+  build_and_push_rds:
+    working_directory: /repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - gk_cntnr_base_v1-{{ .Branch }}
+          paths:
+            - /caches/java.tar
+      - restore_cache:
+          keys:
+            - gk-rds-{{ .Branch }}
+          paths:
+            - /services/rds/*.jar
+      - run:
+          name: Load Docker image + stage UI code
+          command: |
+            set +o pipefail
+            docker load -i /caches/java.tar | true
+      - run:
+          name: Build Gatekeeper UI Container
+          command: |
+            cd services/rds
+            docker build -t gatekeeper/rds ./
+            docker images
+  build_and_push_ec2:
+    working_directory: /repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - gk_cntnr_base_v1-{{ .Branch }}
+          paths:
+            - /caches/java.tar
+      - restore_cache:
+          keys:
+            - gk-ec2-{{ .Branch }}
+          paths:
+            - /services/ec2/*.jar
+      - run:
+          name: Load Docker image + stage UI code
+          command: |
+            set +o pipefail
+            docker load -i /caches/java.tar | true
+      - run:
+          name: Build Gatekeeper UI Container
+          command: |
+            cd services/ec2
+            docker build -t gatekeeper/ec2 ./
+            docker images
 workflows:
   version: 2
   build_services_and_ui:
@@ -142,3 +225,16 @@ workflows:
       - build
       - build_ui
       - build_docker
+      - build_and_push_ui:
+          requires:
+            - build_ui
+            - build_docker
+      - build_and_push_rds:
+          requires:
+            - build
+            - build_docker
+      - build_and_push_ec2:
+          requires:
+            - build
+            - build_docker
+
