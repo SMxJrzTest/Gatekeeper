@@ -46,7 +46,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            ls -ltr ui
+            ls -ltr ui/node_modules
             pushd ui
             npm install --verbose
       - save_cache:
