@@ -14,7 +14,7 @@
 #  limitations under the License.
 #
 
-FROM amazonlinux:latest
+FROM amazonlinux:2
 MAINTAINER Gatekeeper Contributors
 
 RUN yum install -y openssl
