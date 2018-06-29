@@ -23,6 +23,7 @@
 
     <groupId>org.finra</groupId>
     <artifactId>gatekeeper-parent</artifactId>
+    <version></version>
     <packaging>pom</packaging>
     <name>Gatekeeper Services Parent POM</name>
 
