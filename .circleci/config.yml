@@ -93,8 +93,7 @@ jobs:
       - run:
           name: Build Base Container
           command: |
-            cd containers
-            cd base
+            cd containers/base
             docker build -t gatekeeper/base ./
       - run:
           name: Save Docker image layer cache
@@ -125,8 +124,7 @@ jobs:
       - run:
           name: Build Java Container
           command: |
-            cd containers
-            cd java
+            cd containers/java
             docker build -t gatekeeper/java ./
       - run:
           name: Save Docker image layer cache
@@ -157,8 +155,7 @@ jobs:
       - run:
           name: Build Nginx Container
           command: |
-            cd containers
-            cd nginx
+            cd containers/nginx
             docker build -t gatekeeper/nginx ./
       - run:
           name: Save Docker image layer cache
@@ -169,7 +166,6 @@ jobs:
           key: gk_cntnr_nginx_v1-{{ .Branch }}-{{ checksum "/caches/nginx.tar" }}
           paths:
             - /caches/nginx.tar
-
   build_and_push_ui:
     working_directory: ~/repo
     docker:
@@ -198,7 +194,14 @@ jobs:
           command: |
             cd ui
             docker build -t gatekeeper/ui ./
+      - run:
+          name: Push Gatekeeper UI Container to docker repo
+          command: |
+            cd ui
+            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
             docker images
+
   build_and_push_rds:
     working_directory: ~/repo
     docker:
@@ -228,6 +231,13 @@ jobs:
             ls -ltr
             docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/rds ./
             docker images
+      - run:
+          name: Push Gatekeeper RDS Container to docker repo
+          command: |
+            cd service/rds
+            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker images
   build_and_push_ec2:
     working_directory: ~/repo
     docker:
@@ -255,6 +265,14 @@ jobs:
             cd services/ec2
             docker build --build-arg jar_file=gatekeeper-ec2-service-1.0.0.jar -t gatekeeper/ec2 ./
             docker images
+      - run:
+          name: Push Gatekeeper EC2 Container to docker repo
+          command: |
+            cd service/ec2
+            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker images
+
 workflows:
   version: 2
   build_services_and_ui:
