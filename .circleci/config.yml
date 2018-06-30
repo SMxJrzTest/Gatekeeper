@@ -196,6 +196,7 @@ jobs:
       - run:
           name: Build Gatekeeper UI Container
           command: |
+            cd ui
             docker build -t gatekeeper/ui ./
             docker images
   build_and_push_rds:
