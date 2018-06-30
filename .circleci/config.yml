@@ -76,11 +76,11 @@ jobs:
           command: |
             pushd ui
             npm run build
-            cd ..
+            zip dist
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist/*
+              - ui/dist.zip
       - store_test_results:
           path: ~/junit
   build_base_docker:
