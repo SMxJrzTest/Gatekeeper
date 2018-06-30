@@ -201,7 +201,8 @@ jobs:
             docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-latest
             docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
-            docker push gatekeeper/ui
+            docker push ${UI_REPO}:${CIRCLE_BRANCH}-latest
+            docker push ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
   build_and_push_rds:
     working_directory: ~/repo
     docker:
@@ -238,7 +239,8 @@ jobs:
             docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-latest
             docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
-            docker push gatekeeper/rds
+            docker push ${RDS_REPO}:${CIRCLE_BRANCH}-latest
+            docker push ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
   build_and_push_ec2:
     working_directory: ~/repo
     docker:
@@ -273,8 +275,8 @@ jobs:
             docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-latest
             docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
-            docker push gatekeeper/ec2
-
+            docker push ${EC2_REPO}:${CIRCLE_BRANCH}-latest
+            docker push ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
 workflows:
   version: 2
   build_services_and_ui:
