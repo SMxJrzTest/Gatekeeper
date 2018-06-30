@@ -199,7 +199,7 @@ jobs:
           command: |
             cd ui
             docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
 
   build_and_push_rds:
@@ -234,9 +234,9 @@ jobs:
       - run:
           name: Push Gatekeeper RDS Container to docker repo
           command: |
-            cd service/rds
+            cd services/rds
             docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
   build_and_push_ec2:
     working_directory: ~/repo
@@ -268,9 +268,9 @@ jobs:
       - run:
           name: Push Gatekeeper EC2 Container to docker repo
           command: |
-            cd service/ec2
+            cd services/ec2
             docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
 
 workflows:
