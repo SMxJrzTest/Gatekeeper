@@ -76,7 +76,7 @@ jobs:
           command: |
             pushd ui
             npm run build
-            zip dist
+            zip dist/* dist.zip
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
