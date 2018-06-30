@@ -76,11 +76,11 @@ jobs:
           command: |
             pushd ui
             npm run build
-            zip dist/* dist.zip
+            tar -czvf dist.tar.gz dist
       - save_cache:
           key: gk-ui-{{ .Branch }}-{{ epoch }}
           paths:
-              - ui/dist.zip
+              - ui/dist.tar.gz
       - store_test_results:
           path: ~/junit
   build_base_docker:
@@ -190,14 +190,12 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/nginx.tar | true
+            mv /home/circleci/repo/ui/dist.tar.gz ~/repo/ui
+            cd ui
+            tar -xzvf dist.tar.gz
       - run:
           name: Build Gatekeeper UI Container
           command: |
-            cd ui
-            pwd
-            ls -ltr /caches
-            ls -ltr
-            ls -ltr dist
             docker build -t gatekeeper/ui ./
             docker images
   build_and_push_rds:
