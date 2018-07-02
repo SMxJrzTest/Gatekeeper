@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 DOCKER_TAG=$1
 DOCKER_TAG_COMPONENT=$2
 
@@ -26,4 +28,4 @@ docker images
 docker login -u=${DOCKER_USER} -p=${DOCKER_PASS}
 docker push ${DOCKER_REPO}:${DOCKER_RELEASE_TAG}
 docker push ${DOCKER_REPO}:${DOCKER_REPO}:${DOCKER_LATEST_TAG}
-echo "Done"
+echo "Done!"
