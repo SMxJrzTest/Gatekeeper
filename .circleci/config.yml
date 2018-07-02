@@ -197,13 +197,7 @@ jobs:
       - run:
           name: Push Gatekeeper UI Container to docker repo
           command: |
-            cd ui
-            docker tag gatekeeper/ui $DOCKER_USER/gatekeeper-ui:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ui $DOCKER_USER/gatekeeper-ui:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
-            docker images
-            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
-            docker push ${UI_REPO}:${CIRCLE_BRANCH}-latest
-            docker push ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            sh .circleci/push.sh gatekeeper/ui gatekeeper-ui
   build_and_push_rds:
     working_directory: ~/repo
     docker:
@@ -236,13 +230,7 @@ jobs:
       - run:
           name: Push Gatekeeper RDS Container to docker repo
           command: |
-            cd services/rds
-            docker tag gatekeeper/rds $DOCKER_USER/gatekeeper-rds-service:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/rds $DOCKER_USER/gatekeeper-rds-service:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
-            docker images
-            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
-            docker push ${RDS_REPO}:${CIRCLE_BRANCH}-latest
-            docker push ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            sh .circleci/push.sh gatekeeper/rds gatekeeper-rds-service
   build_and_push_ec2:
     working_directory: ~/repo
     docker:
@@ -273,13 +261,7 @@ jobs:
       - run:
           name: Push Gatekeeper EC2 Container to docker repo
           command: |
-            cd services/ec2
-            docker tag gatekeeper/ec2 $DOCKER_USER/gatekeeper-ec2-service:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ec2 $DOCKER_USER/gatekeeper-ec2-service:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
-            docker images
-            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
-            docker push ${EC2_REPO}:${CIRCLE_BRANCH}-latest
-            docker push ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            sh .circleci/push.sh gatekeeper/ec2 gatekeeper-ec2-service
 workflows:
   version: 2
   ci-push:

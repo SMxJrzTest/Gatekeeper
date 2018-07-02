@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DOCKER_TAG=$0
+DOCKER_TAG_COMPONENT=$1
+
+DOCKER_REPO=${DOCKER_USER}/${DOCKER_TAG_COMPONENT}
+
+if [[ -z "${CIRCLE_BRANCH}" ]]; then
+    DOCKER_RELEASE_TAG=${CIRCLE_BRANCH}-latest
+    DOCKER_LATEST_TAG=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+else
+    DOCKER_RELEASE_TAG=$(echo $CIRCLE_TAG | cut -d "v" -f 2)
+    DOCKER_LATEST_TAG=latest
+fi
+
+echo "pushing and tagging image"
+docker tag ${DOCKER_TAG} ${DOCKER_REPO}:${DOCKER_RELEASE_TAG}
+docker tag ${DOCKER_TAG} ${DOCKER_REPO}:${DOCKER_LATEST_TAG}
+docker images
+docker login -u=${DOCKER_USER} -p=${DOCKER_PASS}
+docker push ${DOCKER_REPO}:${DOCKER_RELEASE_TAG}
+docker push ${DOCKER_REPO}:${DOCKER_REPO}:${DOCKER_LATEST_TAG}
