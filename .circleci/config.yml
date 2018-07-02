@@ -198,9 +198,10 @@ jobs:
           name: Push Gatekeeper UI Container to docker repo
           command: |
             cd ui
-            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ui ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            docker tag gatekeeper/ui gatekeeper-ui:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/ui gatekeeper-ui:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
+            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
             docker push ${UI_REPO}:${CIRCLE_BRANCH}-latest
             docker push ${UI_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
   build_and_push_rds:
@@ -236,9 +237,10 @@ jobs:
           name: Push Gatekeeper RDS Container to docker repo
           command: |
             cd services/rds
-            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/rds ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            docker tag gatekeeper/rds gatekeeper-rds-service:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/rds gatekeeper-rds-service:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
+            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
             docker push ${RDS_REPO}:${CIRCLE_BRANCH}-latest
             docker push ${RDS_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
   build_and_push_ec2:
@@ -272,9 +274,10 @@ jobs:
           name: Push Gatekeeper EC2 Container to docker repo
           command: |
             cd services/ec2
-            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-latest
-            docker tag gatekeeper/ec2 ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            docker tag gatekeeper/ec2 gatekeeper-ec2-service:${CIRCLE_BRANCH}-latest
+            docker tag gatekeeper/ec2 gatekeeper-ec2-service:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
             docker images
+            docker login -u=$DOCKER_USER -p=$DOCKER_PASS
             docker push ${EC2_REPO}:${CIRCLE_BRANCH}-latest
             docker push ${EC2_REPO}:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
 workflows:
