@@ -197,6 +197,9 @@ jobs:
       - run:
           name: Push Gatekeeper UI Container to docker repo
           command: |
+            echo $CIRCLE_BRANCH
+            echo $CIRCLE_TAG
+            echo $CIRCLE_BUILD_NUM
             export CIRCLE_BRANCH=$CIRCLE_BRANCH
             export CIRCLE_TAG=$CIRCLE_TAG
             export CIRCLE_BUILD_NUM=$CIRCLE_BUILD_NUM
@@ -233,6 +236,9 @@ jobs:
       - run:
           name: Push Gatekeeper RDS Container to docker repo
           command: |
+            echo $CIRCLE_BRANCH
+            echo $CIRCLE_TAG
+            echo $CIRCLE_BUILD_NUM
             export CIRCLE_BRANCH=$CIRCLE_BRANCH
             export CIRCLE_TAG=$CIRCLE_TAG
             export CIRCLE_BUILD_NUM=$CIRCLE_BUILD_NUM
@@ -267,6 +273,9 @@ jobs:
       - run:
           name: Push Gatekeeper EC2 Container to docker repo
           command: |
+            echo $CIRCLE_BRANCH
+            echo $CIRCLE_TAG
+            echo $CIRCLE_BUILD_NUM
             export CIRCLE_BRANCH=$CIRCLE_BRANCH
             export CIRCLE_TAG=$CIRCLE_TAG
             export CIRCLE_BUILD_NUM=$CIRCLE_BUILD_NUM
