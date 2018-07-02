@@ -197,7 +197,7 @@ jobs:
       - run:
           name: Push Gatekeeper UI Container to docker repo
           command: |
-            sh .circleci/push.sh gatekeeper/ui gatekeeper-ui
+            . .circleci/push.sh gatekeeper/ui gatekeeper-ui
   build_and_push_rds:
     working_directory: ~/repo
     docker:
@@ -230,7 +230,7 @@ jobs:
       - run:
           name: Push Gatekeeper RDS Container to docker repo
           command: |
-            sh .circleci/push.sh gatekeeper/rds gatekeeper-rds-service
+            . .circleci/push.sh gatekeeper/rds gatekeeper-rds-service
   build_and_push_ec2:
     working_directory: ~/repo
     docker:
@@ -261,7 +261,7 @@ jobs:
       - run:
           name: Push Gatekeeper EC2 Container to docker repo
           command: |
-            sh .circleci/push.sh gatekeeper/ec2 gatekeeper-ec2-service
+            . .circleci/push.sh gatekeeper/ec2 gatekeeper-ec2-service
 workflows:
   version: 2
   ci-push:
