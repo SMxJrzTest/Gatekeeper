@@ -329,22 +329,47 @@ workflows:
             branches:
               ignore: /.*/
       - build_java_docker:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - build_base_docker
       - build_nginx_docker:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - build_base_docker
       - build_and_push_ui:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - build_ui
             - build_base_docker
             - build_nginx_docker
       - build_and_push_rds:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - build
             - build_base_docker
             - build_java_docker
       - build_and_push_ec2:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - build
             - build_base_docker
