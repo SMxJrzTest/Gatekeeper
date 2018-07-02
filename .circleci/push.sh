@@ -11,6 +11,7 @@ if [[ -z "${CIRCLE_BRANCH}" ]]; then
     DOCKER_LATEST_TAG=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
     echo "Tag will be: ${DOCKER_RELEASE_TAG}"
 else
+    echo "This is a Tag release"
     DOCKER_RELEASE_TAG=$(echo $CIRCLE_TAG | cut -d "v" -f 2)
     DOCKER_LATEST_TAG=latest
 fi
