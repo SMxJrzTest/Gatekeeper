@@ -7,14 +7,14 @@ DOCKER_TAG_COMPONENT=$2
 
 DOCKER_REPO=${DOCKER_USER}/${DOCKER_TAG_COMPONENT}
 
-if [[ -z "${CIRCLE_BRANCH}" ]]; then
+if [[ -z "${BRANCH}" ]]; then
     echo "This is a CI branch build"
-    DOCKER_RELEASE_TAG=${CIRCLE_BRANCH}-latest
-    DOCKER_LATEST_TAG=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+    DOCKER_RELEASE_TAG=${BRANCH}-latest
+    DOCKER_LATEST_TAG=${BRANCH}-${BUILD_NUM}
     echo "Tag will be: ${DOCKER_RELEASE_TAG}"
 else
     echo "This is a Tag release"
-    DOCKER_RELEASE_TAG=$(echo $CIRCLE_TAG | cut -d "v" -f 2)
+    DOCKER_RELEASE_TAG=$(echo $TAG | cut -d "v" -f 2)
     DOCKER_LATEST_TAG=latest
 fi
 
