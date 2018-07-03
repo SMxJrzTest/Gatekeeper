@@ -89,6 +89,9 @@ jobs:
       - image: docker:17.05.0-ce-git
     steps:
       - run:
+          name: Test
+          command: echo $CIRCLE_PR_NUMBER
+      - run:
           name: Skip this job for Pull Requests
           command: '[[ -z $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
