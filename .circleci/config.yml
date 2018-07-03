@@ -223,8 +223,6 @@ jobs:
           name: Build Gatekeeper RDS Service Container
           command: |
             cd services/rds
-            pwd
-            ls -ltr
             docker build --build-arg jar_file=gatekeeper-rds-service-1.0.0.jar -t gatekeeper/rds ./
             docker images
       - run:

@@ -5,6 +5,7 @@ DOCKER_TAG_COMPONENT=$2
 DOCKER_REPO=${DOCKER_USER}/${DOCKER_TAG_COMPONENT}
 
 BRANCH=${CIRCLE_BRANCH:-UNSET}
+DATE=$(date +"%m%d%y")
 BUILD_NUM=${CIRCLE_BUILD_NUM:-UNSET}
 TAG=${CIRCLE_TAG:-UNSET}
 
@@ -14,8 +15,14 @@ echo "TAG IS $TAG"
 
 if [ "${BRANCH}" != "UNSET" ]; then
     echo "This is a CI branch build"
-    DOCKER_RELEASE_TAG=${BRANCH}-latest
-    DOCKER_LATEST_TAG=${BRANCH}-${BUILD_NUM}
+    if [ "${BRANCH}" == "master" ]; then
+        echo "This is the main branch, not including the branch name in the push"
+        DOCKER_RELEASE_TAG=${DATE}-${BUILD_NUM}
+    else 
+        echo "This is not the main branch (${BRANCH}), including the branch name in this push"
+        DOCKER_RELEASE_TAG=${BRANCH}-${DATE}-${BUILD_NUM}
+    fi
+    DOCKER_LATEST_TAG=${BRANCH}-latest
 else
     echo "This is a Tag release"
     DOCKER_RELEASE_TAG=$(echo $TAG | cut -d "v" -f 2)
