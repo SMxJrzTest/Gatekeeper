@@ -90,12 +90,9 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
-      - run:
-          name: Skip this job for Pull Requests
-          command: '[[ -v CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - run:
           name: Build Base Container
           command: |
@@ -117,7 +114,7 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
       - restore_cache:
@@ -151,7 +148,7 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
       - restore_cache:
@@ -185,7 +182,7 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
       - restore_cache:
@@ -220,7 +217,7 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
       - restore_cache:
@@ -254,7 +251,7 @@ jobs:
     steps:
       - run:
           name: Skip this job for Pull Requests
-          command: '[[ -v $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
+          command: '[[ -n $CIRCLE_PR_NUMBER ]] && circleci step halt || true'
       - checkout
       - setup_remote_docker
       - restore_cache:
