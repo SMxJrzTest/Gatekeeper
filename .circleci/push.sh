@@ -1,17 +1,21 @@
-#!/bin/bash
-
-set -e
+echo "$CIRCLE_BRANCH"
 
 DOCKER_TAG=$1
 DOCKER_TAG_COMPONENT=$2
-
 DOCKER_REPO=${DOCKER_USER}/${DOCKER_TAG_COMPONENT}
 
-if [[ -z "${BRANCH}" ]]; then
+BRANCH=${CIRCLE_BRANCH:-UNSET}
+BUILD_NUM=${CIRCLE_BUILD_NUM:-UNSET}
+TAG=${CIRCLE_TAG:-UNSET}
+
+echo "BRANCH IS $BRANCH"
+echo "BUILD_NUM IS $BUILD_NUM"
+echo "TAG IS $TAG"
+
+if [ "${BRANCH}" != "UNSET" ]; then
     echo "This is a CI branch build"
     DOCKER_RELEASE_TAG=${BRANCH}-latest
     DOCKER_LATEST_TAG=${BRANCH}-${BUILD_NUM}
-    echo "Tag will be: ${DOCKER_RELEASE_TAG}"
 else
     echo "This is a Tag release"
     DOCKER_RELEASE_TAG=$(echo $TAG | cut -d "v" -f 2)
