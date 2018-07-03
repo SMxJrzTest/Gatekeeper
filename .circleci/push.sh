@@ -31,5 +31,5 @@ docker tag ${DOCKER_TAG} ${DOCKER_REPO}:${DOCKER_LATEST_TAG}
 docker images
 docker login -u=${DOCKER_USER} -p=${DOCKER_PASS}
 docker push ${DOCKER_REPO}:${DOCKER_RELEASE_TAG}
-docker push ${DOCKER_REPO}:${DOCKER_REPO}:${DOCKER_LATEST_TAG}
+docker push ${DOCKER_REPO}:${DOCKER_LATEST_TAG}
 echo "Done!"
